@@ -1,0 +1,21 @@
+{
+    "name": "SSOApplication",
+    "version": "0.0.1",
+    "description": "",
+    "author": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "devDependencies": {
+        "@microsoft/teamsfx-cli": "1.*"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@fluentui/react": "^8.106.9",
+        "@twotalltotems/react-native-otp-input": "^1.3.11",
+        "axios": "^1.3.4",
+        "base-64": "^1.0.0",
+        "buffer": "^6.0.3",
+        "http-proxy-middleware": "^2.0.6"
+    }
+}
