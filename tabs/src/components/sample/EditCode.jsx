@@ -28,8 +28,8 @@ export function EditCode(props) {
   const [verifycode, setVerifyCode] = useState('');
   // const handleSub = (event) => {
   //   event.preventDefault();
-  //   let username = 'Gmyz9LvjXMPsnOnCktfH4vLW8Ayi';
-  //   let password = '5Kjvyt95m7C0UfvTr0pmPlmQUpbp';
+  //   let username = '';
+  //   let password = '';
   //   fetch('https://services.inteliquent.com/Services/2.0.0/tnDetail', {
   //     method: 'POST',
   //     mode: 'no-cors',
@@ -49,8 +49,8 @@ export function EditCode(props) {
 
   const handleSub = (event) => {
     event.preventDefault();
-    let username = 'Gmyz9LvjXMPsnOnCktfH4vLW8Ayi';
-    let password = '5Kjvyt95m7C0UfvTr0pmPlmQUpbp';
+    let username = '';
+    let password = '';
     const data = {
       privateKey: username,
       tnSearchList: {
@@ -67,7 +67,7 @@ export function EditCode(props) {
     };
     const headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Basic R215ejlMdmpYTVBzbk9uQ2t0Zkg0dkxXOEF5aTo1S2p2eXQ5NW03QzBVZnZUcjBwbVBsbVFVcGJw',
+      'Authorization': '',
     }
     const url = 'https://services.inteliquent.com/Services/2.0.0/tnDetail'
 
@@ -98,7 +98,7 @@ export function EditCode(props) {
     // const jsonData = JSON.stringify(data);
     // const headers = {
     //   'Content-Type': 'application/json',
-    //   'Authorization': "Basic R215ejlMdmpYTVBzbk9uQ2t0Zkg0dkxXOEF5aTo1S2p2eXQ5NW03QzBVZnZUcjBwbVBsbVFVcGJw",
+    //   'Authorization': "",
     // };
 
     // fetch('https://services.inteliquent.com/Services/2.0.0/tnDetail', {
@@ -106,7 +106,7 @@ export function EditCode(props) {
     //       mode: 'no-cors',
     //       headers: {
     //           'Content-Type': 'application/json',
-    //           'Authorization': "Basic R215ejlMdmpYTVBzbk9uQ2t0Zkg0dkxXOEF5aTo1S2p2eXQ5NW03QzBVZnZUcjBwbVBsbVFVcGJw",
+    //           'Authorization': "",
     //          },
     //       body: JSON.stringify(data)
     //     })
