@@ -1,0 +1,43 @@
+.App {
+    /* font-family: sans-serif;
+    text-align: center; */
+    /* margin-left: 20px; */
+
+
+}
+
+.accordianDrop {
+    border: #605e5c solid 1px;
+    background: white;
+    width: 100%;
+}
+
+.userField {
+    width: 50% !important;
+    margin-left: 10px;
+}
+
+.side-by-side {
+    display: flex;
+    flex-direction: row;
+}
+
+.space {
+    height: 15px;
+}
+
+.textinput {
+    width: 97% !important;
+}
+.invalid {
+    color: red;
+    font-size: medium;
+}
+.center {
+    text-align: center;
+  }
+  .title{
+    font-size: medium;
+    color: white;
+    background-color: black;
+  }

@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { MaskedTextField } from '@fluentui/react/lib/TextField';
-import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
+import { TextField, MaskedTextField } from '@fluentui/react/lib/TextField';
 import { PrimaryButton, DefaultButton } from '@fluentui/react/lib/Button';
-import { useBoolean } from '@fluentui/react-hooks';
-import { encode } from "base-64";
-import axios from "axios";
+import { Stack} from '@fluentui/react';
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionItem,
+  AccordionPanel
+} from "@fluentui/react-accordion";
+import "./EditCode.css";
 
 export function EditCode(props) {
-
 
   const { tabCodeEntry } = {
     tabCodeEntry: "tabs/src/index.jsx",
@@ -17,169 +20,119 @@ export function EditCode(props) {
     isBlocking: false,
     styles: { main: { maxWidth: 450 } },
   };
-  const dialogContentProps = {
-    type: DialogType.largeHeader,
-    title: 'Verfication Code',
-    subText: 'Please Enter the Verfication Code',
+  const stackTokens = { childrenGap: 50 };
+  const [verifycode, setVerifyCode] = useState('');
+  const [responseData, setResponseData] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [invalidDetails, setInvalidDetails] = useState("");
+  const [showDetails, setShowDetails] = useState(true);
+  async function createUser() {
+    if (verifycode == "") {
+      setErrorMessage("Please Enter the Number !");
+      setShowDetails(false)
+    }
+    else {
+      setErrorMessage("");
+      const data = {
+        privateKey: '',
+        tnSearchList: {
+          tnSearchItem: [
+            {
+              tnMask: verifycode
+            }
+          ]
+        },
+        "pageSort": {
+          "size": 1,
+          "page": 1
+        }
+      };
+      const response = await fetch(`/Services/2.0.0/tnDetail`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ data: data })
+      })
+      const responseData = await response.json();
+      setResponseData(responseData);
+      if (responseData.userData.trunkcall == verifycode) {
+        setShowDetails(true);
+        setInvalidDetails("")
+      }
+      else {
+        setInvalidDetails("Given Details are Not Matching !");
+        setShowDetails(false)
+      }
+    }
   };
 
-  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
-  // const [data, setCode] = useState({code: ''});
-  const [verifycode, setVerifyCode] = useState('');
-  // const handleSub = (event) => {
-  //   event.preventDefault();
-  //   let username = '';
-  //   let password = '';
-  //   fetch('https://services.inteliquent.com/Services/2.0.0/tnDetail', {
-  //     method: 'POST',
-  //     mode: 'no-cors',
-  //     headers: {
-  //       'Authorization': 'Basic ' + encode('${username}:${password}'),
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify(data)
-  //   })
-  //   .then(response => {
-  //     console.log('response',response)
-  //   })
-  //   .catch(error => {
-  //     console.log('error',error)
-  //   });
-  // };
 
-  const handleSub = (event) => {
-    event.preventDefault();
-    let username = '';
-    let password = '';
-    const data = {
-      privateKey: username,
-      tnSearchList: {
-        tnSearchItem: [
-          {
-            tnMask: verifycode
-          }
-        ]
-      },
-      "pageSort": {
-        "size": 1,
-        "page": 1
-      }
-    };
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': '',
-    }
-    const url = 'https://services.inteliquent.com/Services/2.0.0/tnDetail'
-
-    axios.post(url, data, {
-      headers: headers
-    })
-      .then((response) => {
-        console.log("data", response)
-      })
-      .catch((error) => {
-        console.log("dataerror", error)
-      })
-    // axios({
-    //   method: 'post',
-    //   mode: 'no-cors',
-    //   url: url,
-    //   withCredentials: false,
-    //   headers: headers,
-    //   data: JSON.stringify(data)
-    // })
-    // .then((response) => {
-    //   console.log("data",response)
-    //  })
-    //  .catch((error) => {
-    //    console.log("dataerror",error)
-    //  })
-
-    // const jsonData = JSON.stringify(data);
-    // const headers = {
-    //   'Content-Type': 'application/json',
-    //   'Authorization': "",
-    // };
-
-    // fetch('https://services.inteliquent.com/Services/2.0.0/tnDetail', {
-    //       method: 'POST',
-    //       mode: 'no-cors',
-    //       headers: {
-    //           'Content-Type': 'application/json',
-    //           'Authorization': "",
-    //          },
-    //       body: JSON.stringify(data)
-    //     })
-    //     .then(response => {
-    //       console.log('response',response)
-    //     })
-    //     .catch(error => {
-    //       console.log('error',error)
-    //     });
-
-    // fetch('https://services.inteliquent.com/Services/2.0.0/tnDetail', {
-    //   method: 'POST',
-    //   mode: 'no-cors',
-    //   headers: headers,
-    //   body: jsonData
-    // })
-    //   .then(response => response.json())
-    //   .then(data => console.log(data))
-    //   .catch(error => console.error(error));
-  }
-
-  const [showDetails, setShowDetails] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showbutton, setShowButton] = useState(false);
-  // const handleSubmit = (event) => {
-  //   event.preventDefault(); // prevent default form submission behavior
-  //   // check if code is valid
-  //   if (data === "12345") {
-  //     setShowDetails(true); // set showDetails state to true
-  //     toggleHideDialog(false);
-  //     setErrorMessage(""); // clear error message
-  //   } else {
-  //     setErrorMessage("Invalid code!"); // set error message
-  //   }
-
-  // };
 
   return (
     <div>
-      <MaskedTextField label="Please Enter the Mobile Number" mask="(999) 999 - 9999" title="A 10 digit number" />
+      <TextField type="number" label="Please Enter the Mobile Number" placeholder="Enter the Number" value={verifycode} onChange={e => setVerifyCode(e.target.value)}></TextField>
+      {errorMessage && <p className="invalid">{errorMessage}</p>}
+      {invalidDetails && <p className="invalid">{invalidDetails}</p>}
       <div style={{ height: 10 }}></div>
-      <DefaultButton secondaryText="Opens the Sample Dialog" onClick={toggleHideDialog} text="Verify" />
+      <PrimaryButton onClick={createUser} text="Submit" />
+      <div style={{ height: 5 }}></div>
       {showDetails && (
         <div>
-          <h2>Details</h2>
-          <p>Welcome To the Application</p>
-          <p>Name : Test Name</p>
+          {responseData && (
+            <div className="App">
+              <h1 className="center">Hello {responseData.userData.name} </h1>
+              <Accordion
+                expandIconPosition="right"
+                icon={undefined}
+                openItems={[
+                  '1'
+                ]}
+                size="large"
+                navigable={true}
+                alwaysOpen
+              >
+                <AccordionItem className="accordianDrop" value="1"  >
+                  <AccordionHeader className="title">E911 Services</AccordionHeader>
+                  <AccordionPanel>
+                    <div className="userField">
+                      <TextField label="Name" value={responseData.userData.name} disabled></TextField>
+                    </div>
+                    <Stack horizontal tokens={stackTokens}>
+                    <div className="userField">
+                      <TextField label="Street Num" value={responseData.userData.origStreetNum} disabled></TextField>
+                    </div>
+                    <div className="userField">
+                      <TextField label="Street Num" value={responseData.userData.trunkcall} disabled></TextField>
+                    </div>
+                    </Stack>
+                    <Stack horizontal tokens={stackTokens}>
+                      <div className="userField">
+                        <TextField className="textinput" label="Street Info" value={responseData.userData.origStreetInfo} disabled></TextField>
+                      </div>
+                      <div className="userField">
+                        <TextField className="textinput" label="City" value={responseData.userData.origCity} disabled></TextField>
+                      </div>
+                    </Stack>
+                    <Stack horizontal tokens={stackTokens}>
+                      <div className="userField">
+                        <TextField className="textinput" label="Postal Code" value={responseData.userData.origPostalCode} disabled></TextField>
+                      </div>
+                      <div className="userField">
+                        <TextField className="textinput" label="Activate Date" value={responseData.userData.e911ActivateDate} disabled></TextField>
+                      </div>
+                    </Stack>
+                    <div className="space"></div>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          )}
         </div>
       )}
-      <Dialog
-        hidden={hideDialog}
-        onDismiss={toggleHideDialog}
-        dialogContentProps={dialogContentProps}
-        modalProps={modelProps}
-      >
-        <div class="row">
-          <form onSubmit={handleSub}>
-            <div>
-              <label htmlFor="code">Enter code:</label>
-              {/* <input type="text" id="code" value={data.code} onChange={(event) => setCode(event.target.value)} /> */}
-              <input type="number" value={verifycode} onChange={e => setVerifyCode(e.target.value)} />
-            </div>
-            <DialogFooter>
-              <PrimaryButton type="submit">Submit</PrimaryButton>
-              <DefaultButton onClick={toggleHideDialog} text="Cancel" />
-            </DialogFooter>
-          </form>
-          {errorMessage && <p>{errorMessage}</p>}
-        </div>
-      </Dialog>
     </div>
-
   );
-
 }
+
+
 
